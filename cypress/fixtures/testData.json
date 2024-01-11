@@ -1,0 +1,10 @@
+{
+    "username": "mariaficherry",
+    "password": "mk78/61234",
+    "menuOptions": [
+        ".item-profile > .hasIcon",
+        ".item-settings > .hasIcon",
+        ".item-nightmode > .hasIcon > .Button-label",
+        ".item-logOut > .hasIcon"
+    ]
+}
