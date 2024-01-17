@@ -1,7 +1,7 @@
 describe('Flarum User info editing', () => {
 
   beforeEach(() => {
-    cy.loadCredentialsFromJson()
+    cy.loadTestDataFromJson()
     cy.visit('/')
   })
 

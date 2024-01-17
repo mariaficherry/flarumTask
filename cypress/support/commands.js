@@ -57,7 +57,7 @@ Cypress.Commands.add('typeInTextArea', (text) => {
         .type(text)
 })
 
-Cypress.Commands.add('loadCredentialsFromJson', () => {
+Cypress.Commands.add('loadTestDataFromJson', () => {
     cy.fixture('testData.json').then((data) => {
         Cypress.env('username', data.username);
         Cypress.env('password', data.password);
