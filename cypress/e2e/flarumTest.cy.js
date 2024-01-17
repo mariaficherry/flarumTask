@@ -1,53 +1,54 @@
-describe('template spec', () => {
+describe('Flarum User info editing', () => {
 
   beforeEach(() => {
-    cy.loadTestDataFromJson();
+    cy.loadCredentialsFromJson()
     cy.visit('/')
   })
 
-  it('testCase1', () => {
-    const menuOptions = Cypress.env('menuOptions');
-    const username = Cypress.env('username');
-    const password = Cypress.env('password');
+  it('user bio info can be changed', () => {
+    const username = Cypress.env('username')
+    const password = Cypress.env('password')
+    const editBioEndpoint = Cypress.env('editBioEndpoint')
+    const onlineStatus = Cypress.env('onlineStatus')
+    const randomTextInput = Cypress.env('randomTextInput')
+    const hereIamTextInput = Cypress.env('hereIamTextInput')
+    const stubbedTextInput = Cypress.env('stubbedTextInput')
 
-    cy.get('.Header-logo').should('exist')
+    cy.checkLogoExists();
 
-    cy.clickLink('.item-logIn > .Button > .Button-label:contains("Log In")')
+    cy.clickLoginButton();
 
     cy.loginViaUi(username, password)
 
-    cy.clickLink(`.Button-label > .username:contains('${username}')`)
+    cy.clickUsernameButton(username)
 
-    const dropdownMenu = '.item-session > .ButtonGroup > .Dropdown-menu'
+    cy.checkMenuOptionsExist()
 
-    menuOptions.forEach((dropdownMenu) => {
-      cy.get(dropdownMenu).each(($element) => {
-        cy.wrap($element).should('exist');
-      })
-    })
+    cy.clickProfileButton()
 
-    cy.clickLink('.Button-label:contains("Profile")')
+    cy.checkUserProfileMenuContainsUsername(username)
 
-    cy.get('.UserCard-identity > .username').should('contain', username)
+    cy.checkUserStatus(onlineStatus)
 
-    cy.intercept('POST', 'api/users/42763').as('editBio')
+    cy.intercept('POST', editBioEndpoint).as('editBio')
 
-    cy.clickLink('.UserBio-content')
+    cy.clickBioField()
 
-    cy.typeInTextArea('qwerty' + Math.random() + '{enter}')
+    cy.typeInTextArea(randomTextInput + Math.random() + '{enter}')
 
     cy.wait('@editBio').its('response.statusCode').should('eq', 200)
 
     cy.fixture('stubbedBioRequest.json').then((stubbedBio) => {
-      cy.intercept('POST', 'api/users/42763', {
-        data: stubbedBio.data
+      cy.intercept('POST', editBioEndpoint, (req) => {
+        req.body.data = stubbedBio.data
+        req.continue()
       }).as('stubbedBio')
-    });
+    })
 
-    cy.clickLink('.UserBio-content')
+    cy.clickBioField()
 
-    cy.typeInTextArea('here I am{enter}')
+    cy.typeInTextArea(hereIamTextInput + '{enter}')
 
-    cy.get('.UserBio-content:contains("stubbed bio")').should('exist')
+    cy.checkTextExists(stubbedTextInput)
   })
 })

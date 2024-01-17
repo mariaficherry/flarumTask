@@ -1,10 +1,9 @@
 {
-    "username": "mariaficherry",
-    "password": "mk78/61234",
-    "menuOptions": [
-        ".item-profile > .hasIcon",
-        ".item-settings > .hasIcon",
-        ".item-nightmode > .hasIcon > .Button-label",
-        ".item-logOut > .hasIcon"
-    ]
+    "username": "<username>",
+    "password": "<password>",
+    "editBioEndpoint": "api/users/42763",
+    "onlineStatus": "Online",
+    "randomTextInput": "qwerty",
+    "hereIamTextInput": "here I am",
+    "stubbedTextInput": "stubbed bio"
 }
