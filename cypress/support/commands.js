@@ -1,8 +1,7 @@
-import Selectors from "../utils/selectors.js";
-const selectors = new Selectors();
+import Selectors from "../support/selectors.js";
 
-Cypress.Commands.add('checkLogoExists', () => {
-    cy.get(Selectors.flarumLogo).should('exist')
+Cypress.Commands.add('checkLogoIsVisible', () => {
+    cy.get(Selectors.flarumLogo).should('be.visible')
 })
 
 Cypress.Commands.add('clickLoginButton', () => {
@@ -29,8 +28,8 @@ Cypress.Commands.add('clickBioField', () => {
     cy.get(Selectors.userBioField).click()
 })
 
-Cypress.Commands.add('checkTextExists', (text) => {
-    cy.get(Selectors.getUserBioFieldWithText(text)).should('exist')
+Cypress.Commands.add('checkUserBioTextIsVisible', (text) => {
+    cy.get(Selectors.getUserBioFieldWithText(text)).should('be.visible')
 })
 
 Cypress.Commands.add('checkMenuOptionsExist', () => {
@@ -42,12 +41,9 @@ Cypress.Commands.add('checkMenuOptionsExist', () => {
 })
 
 Cypress.Commands.add('loginViaUi', (username, password) => {
-    cy.get('.Form > :nth-child(1) > .FormControl').type(username)
-    cy.wait(1000)
-        .get('.Form > :nth-child(1) > .FormControl')
-        .invoke('val')
-        .should('eq', username)
-    cy.get(':nth-child(2) > .FormControl').type(password)
+    cy.get(Selectors.usernameTextbox).type(username)
+        .should('have.value', username)
+    cy.get(Selectors.passwordTextbox).type(password)
     cy.get('form').submit()
 })
 
@@ -55,16 +51,4 @@ Cypress.Commands.add('typeInTextArea', (text) => {
     cy.get('textarea')
         .clear()
         .type(text)
-})
-
-Cypress.Commands.add('loadTestDataFromJson', () => {
-    cy.fixture('testData.json').then((data) => {
-        Cypress.env('username', data.username);
-        Cypress.env('password', data.password);
-        Cypress.env('editBioEndpoint', data.editBioEndpoint);
-        Cypress.env('onlineStatus', data.onlineStatus);
-        Cypress.env('randomTextInput', data.randomTextInput);
-        Cypress.env('hereIamTextInput', data.hereIamTextInput);
-        Cypress.env('stubbedTextInput', data.stubbedTextInput);
-    })
 })

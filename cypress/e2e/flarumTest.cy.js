@@ -1,22 +1,17 @@
+import * as testData from '../fixtures/testData.json'
+const { username, password, editBioEndpoint, onlineStatus, randomTextInput, hereIamTextInput, stubbedTextInput } = testData
+
 describe('Flarum User info editing', () => {
 
   beforeEach(() => {
-    cy.loadTestDataFromJson()
     cy.visit('/')
   })
 
   it('user bio info can be changed', () => {
-    const username = Cypress.env('username')
-    const password = Cypress.env('password')
-    const editBioEndpoint = Cypress.env('editBioEndpoint')
-    const onlineStatus = Cypress.env('onlineStatus')
-    const randomTextInput = Cypress.env('randomTextInput')
-    const hereIamTextInput = Cypress.env('hereIamTextInput')
-    const stubbedTextInput = Cypress.env('stubbedTextInput')
 
-    cy.checkLogoExists();
+    cy.checkLogoIsVisible()
 
-    cy.clickLoginButton();
+    cy.clickLoginButton()
 
     cy.loginViaUi(username, password)
 
@@ -49,6 +44,6 @@ describe('Flarum User info editing', () => {
 
     cy.typeInTextArea(hereIamTextInput + '{enter}')
 
-    cy.checkTextExists(stubbedTextInput)
+    cy.checkUserBioTextIsVisible(stubbedTextInput)
   })
 })
