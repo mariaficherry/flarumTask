@@ -1,0 +1,9 @@
+{
+    "username": "<username>",
+    "password": "<password>",
+    "editBioEndpoint": "api/users/42763",
+    "onlineStatus": "Online",
+    "randomTextInput": "qwerty",
+    "hereIamTextInput": "here I am",
+    "stubbedTextInput": "stubbed bio"
+}
