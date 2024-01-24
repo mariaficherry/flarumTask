@@ -1,5 +1,6 @@
 import * as testData from '../fixtures/testData.json'
-const { username, password, editBioEndpoint, onlineStatus, randomTextInput, hereIamTextInput, stubbedTextInput } = testData
+const { username, password, onlineStatus, randomTextInput, hereIamTextInput, stubbedTextInput } = testData
+import * as stubbedBioText from '../fixtures/stubbedBioRequest.json'
 
 describe('Flarum User info editing', () => {
 
@@ -25,20 +26,13 @@ describe('Flarum User info editing', () => {
 
     cy.checkUserStatus(onlineStatus)
 
-    cy.intercept('POST', editBioEndpoint).as('editBio')
+    cy.interceptBioTextEdit()
 
     cy.clickBioField()
 
     cy.typeInTextArea(randomTextInput + Math.random() + '{enter}')
 
-    cy.wait('@editBio').its('response.statusCode').should('eq', 200)
-
-    cy.fixture('stubbedBioRequest.json').then((stubbedBio) => {
-      cy.intercept('POST', editBioEndpoint, (req) => {
-        req.body.data = stubbedBio.data
-        req.continue()
-      }).as('stubbedBio')
-    })
+    cy.stubBioTextResponse(stubbedBioText.data)
 
     cy.clickBioField()
 

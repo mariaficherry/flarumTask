@@ -1,4 +1,5 @@
-import Selectors from "../support/selectors.js";
+import Selectors from "../support/selectors.js"
+import * as testData from '../fixtures/testData.json'
 
 Cypress.Commands.add('checkLogoIsVisible', () => {
     cy.get(Selectors.flarumLogo).should('be.visible')
@@ -51,4 +52,28 @@ Cypress.Commands.add('typeInTextArea', (text) => {
     cy.get('textarea')
         .clear()
         .type(text)
+})
+
+Cypress.Commands.add('interceptBioTextEdit', () => {
+    cy.intercept('POST', testData.editBioEndpoint, (req) => {
+        req.reply((res) => {
+            res.statusCode = 200
+            expect(res.statusCode).to.equal(200)
+        })
+    })
+})
+
+Cypress.Commands.add('stubBioTextResponse', (stubbedText) => {
+    cy.request({
+        method: 'GET',
+        url: testData.editBioEndpoint,
+        data: testData.hereIamTextInput
+    }).then(() => {
+        cy.intercept('POST', testData.editBioEndpoint, (req) => {
+            statusCode: 200,
+                req.continue((res) => {
+                    res.body.data = stubbedText
+                })
+        })
+    })
 })
